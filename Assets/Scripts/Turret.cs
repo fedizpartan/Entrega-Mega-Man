@@ -13,6 +13,8 @@ public class Turret : MonoBehaviour
     float FireRate = 0.5f;
     float nextFire;
 
+    float NextFireIn;
+
     int HP;
 
     Animator TurretBody;
@@ -33,6 +35,9 @@ public class Turret : MonoBehaviour
     void Update()
     {
         EnemyDetection();
+
+
+        Disparar();
         
     }
 
@@ -44,13 +49,23 @@ public class Turret : MonoBehaviour
         //!= diferente
         return detector.collider != null;
 
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.TransformDirection(Vector2.left), 7f);
      
 
     }
 
-   
+    void Disparar()
+    {
+     
+        GameObject bullet = Instantiate(Bala, transform.position, transform.rotation);
+       
+        bool dir = transform.localScale.x == 1;
 
+        (bullet.GetComponent<Bullet>()).Shoot(dir, speed * 2);
 
+        NextFireIn = Time.time + FireRate;
+
+    }
 
 
     public void OnTriggerEnter2D(Collider2D collision)
@@ -93,7 +108,9 @@ public class Turret : MonoBehaviour
             }
 
         }
-    }
 
+
+
+    }
 
 }
