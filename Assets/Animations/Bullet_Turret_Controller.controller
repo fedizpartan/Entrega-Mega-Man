@@ -35,11 +35,11 @@ AnimatorController:
   m_Name: Bullet_Turret_Controller
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Rotation
-    m_Type: 9
+  - m_Name: Idle
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
@@ -84,7 +84,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -539095232395098600}
-    m_Position: {x: 30, y: 200, z: 0}
+    m_Position: {x: 30, y: 220, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

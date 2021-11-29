@@ -1,36 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] CircleCollider2D Detector;
     [SerializeField] GameObject Player;
-
+   
     BoxCollider2D EnemyBody;
     Animator EnemyAni;
+    Rigidbody2D mybody;
 
     void Start()
     {
-
-
         EnemyAni.SetBool("Fly A", true);
-       
+        EnemyBody = GetComponent<BoxCollider2D>();
+        Detector = GetComponent<CircleCollider2D>();
 
-
+        EnemyAni.SetBool("Death", false);
+      
     }
 
     
     void Update()
     {
 
-        EnemyAni.GetBool("Fly A");
 
 
+        Move();
 
 
-
-       /* Collider2D chocando = Physics2D.OverlapCircle(transform.position, 5, LayerMask.GetMask("Player"));
+       /*Collider2D chocando = Physics2D.OverlapCircle(transform.position, 5, LayerMask.GetMask("Player"));
 
         if(chocando != null)
         {
@@ -57,19 +58,61 @@ public class Enemy : MonoBehaviour
         }*/
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+        if(collision.gameObject.CompareTag("Disparo"))
+        {
+
+            EnemyAni = GetComponent<Animator>();
+            EnemyAni.SetBool("Death",true );
+            
+        }
+    }
+
+   
+
+
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            
+            SceneManager.LoadScene("GameOver");
+        }
+    }
+    void Move()
+    {
+
+        float direccion = Input.GetAxis("Horizontal");
+
+        if (direccion < 0)
+        {
+            transform.localScale = new Vector2(-1, 1);
+        }
+        else
+            transform.localScale = new Vector2(1, 1);
+    }
     private void OnDrawGizmos()
     {
         //Gizmos.DrawLine(transform.position, Player.transform.position);
        // Gizmos.DrawWireSphere(transform.position, 5);
     }
 
-
-
-    private void OnTriggerEnter2D(Collider2D bullet)
+    public void bigoof()
     {
-        EnemyAni.SetBool("Death", true);
-
-        Destroy(gameObject, 0.03f);
+        Destroy(gameObject);
     }
+   
+ 
+
+
+
+    
+
+    
 
 }
+
+

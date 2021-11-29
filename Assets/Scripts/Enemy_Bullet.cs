@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Enemy_Bullet : MonoBehaviour
 {
 
     Animator myAnimator;
     Rigidbody2D Enemy_Body;
-    [SerializeField] AudioClip sfx_Bullet;
     [SerializeField] float speed;
 
     // Start is called before the first frame update
@@ -16,8 +16,20 @@ public class Enemy_Bullet : MonoBehaviour
 
         Enemy_Body = GetComponent<Rigidbody2D>();
         Enemy_Body.velocity = new Vector2(8, 0);
-        myAnimator.SetTrigger("Rotation");
 
+
+        Enemy_Body.velocity = transform.right * speed;
+
+     
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+
+            SceneManager.LoadScene("GameOver");
+        }
     }
 
     // Update is called once per frame

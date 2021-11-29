@@ -16,6 +16,9 @@ public class Megaman : MonoBehaviour
     [SerializeField] Text Reloj;
 
 
+    public bool YouLose = false;
+    public bool YouWin = false;
+
     float FireRate = 0.3f;
     float NextFireIn;
 
@@ -48,6 +51,8 @@ public class Megaman : MonoBehaviour
     float tiempo;
     float contador = 0;
 
+    private AudioSource landing;
+
 
     // Start is called before the first frame update
     void Start()
@@ -74,7 +79,14 @@ public class Megaman : MonoBehaviour
         Disparar();
         DashSkill();
         //TimerNormal();
+        DeathTouch();
+        landing = GetComponent<AudioSource>();
         
+    }
+
+    void Landing()
+    {
+        landing.Play();
     }
 
 
@@ -214,6 +226,7 @@ public class Megaman : MonoBehaviour
         if(myBody.velocity.y < -0.05f & myAnimator.GetBool("TakeOff"))
         {
             myAnimator.SetBool("Is Falling", true);
+            AudioSource.PlayClipAtPoint(sfx_Aterrizaje, Camera.main.transform.position);
         }
 
     }
@@ -225,7 +238,7 @@ public class Megaman : MonoBehaviour
     void Saltar()
     {
       
-        {
+        
             if(OnFloor())
             {
                 DJ = false;
@@ -240,26 +253,26 @@ public class Megaman : MonoBehaviour
                     DJ = true;
 
                     AudioSource.PlayClipAtPoint(sfx_Salto, Camera.main.transform.position);
-                }
-            }
+               }
+            
 
            
         }
 
         //aqui se puede hacer doble salto
-        if (!myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && DJ)
+        /*if (!myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && DJ)
         {
             if (Input.GetKeyDown(KeyCode.Space))
                 {
                 myBody.AddForce(new Vector2(0, jumpForce/2), ForceMode2D.Impulse);
                 DJ = false;
             }
-        }
+        }*/
         //////////////////////////////////////////////////////////////////////
     
 
 
-        /*if (Input.GetKeyDown(KeyCode.Space) && myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if (Input.GetKeyDown(KeyCode.Space) && myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             myBody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             myAnimator.SetTrigger("Jump");
@@ -290,7 +303,7 @@ public class Megaman : MonoBehaviour
         if (!myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             myAnimator.SetBool("Is Falling", true);
-        }*/
+        }
 
     }
     void DashSkill()
@@ -418,8 +431,19 @@ public class Megaman : MonoBehaviour
 
         }
 
+    }
+
+    void DeathTouch()
+    {
+        if(myCollider.IsTouchingLayers(LayerMask.GetMask("Default")))
+        {
+            AudioSource.PlayClipAtPoint(sfx_Die, Camera.main.transform.position);
+
+            Destroy(this.gameObject);
+         //bool YouLose =  gameObject.GetComponent<GameManager>().RestartLevel;
 
 
+        }
 
 
 
